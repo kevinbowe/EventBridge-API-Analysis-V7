@@ -1,0 +1,49 @@
+{
+	"configurations": [
+		{
+			"type": "aws-sam",
+			"request": "direct-invoke",
+			"name": "API EventBridge-API-Analysis-V7:HelloWorldFunction",
+			"invokeTarget": {
+				"target": "api",
+				"templatePath": "${workspaceFolder}/template.yaml",
+				"logicalId": "HelloWorldFunction"
+			},
+			"api": {
+				"path": "/hello",
+				"httpMethod": "get",
+				"payload": {
+					"json": {}
+				}
+			}
+		},
+		{
+			"type": "aws-sam",
+			"request": "direct-invoke",
+			"name": "EventBridge-API-Analysis-V7:HelloWorldFunction",
+			"invokeTarget": {
+				"target": "template",
+				"templatePath": "${workspaceFolder}/template.yaml",
+				"logicalId": "HelloWorldFunction"
+			},
+			"lambda": {
+				"payload": {},
+				"environmentVariables": {}
+			}
+		},
+		{
+			"type": "aws-sam",
+			"request": "direct-invoke",
+			"name": "EventBridge-Analysis-V3:atmProducerFn",
+			"invokeTarget": {
+				"target": "template",
+				"templatePath": "${workspaceFolder}/template.yaml",
+				"logicalId": "atmProducerFn"
+			},
+			"lambda": {
+				"payload": {},
+				"environmentVariables": {}
+			}
+		}
+	]
+}

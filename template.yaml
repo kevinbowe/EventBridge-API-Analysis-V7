@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: myATMapp
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: hello-world/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+
+  atmProducerFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: atmProducer/
+      Handler: handler.lambdaHandler
+      Runtime: nodejs18.x
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Resource: '*'
+            Action:
+              - events:PutEvents
+
+  atmConsumerCase1Fn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: atmConsumer/
+      Handler: handler.case1Handler
+      Runtime: nodejs18.x
+
+  atmConsumerCase2Fn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: atmConsumer/
+      Handler: handler.case2Handler
+      Runtime: nodejs18.x
+      Events:
+        Trigger:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern:
+              source:
+                - custom.myATMapp
+              detail-type:
+                - transaction
+              detail:
+                location:
+                  - prefix: NY-
+
+  atmConsumerCase3Fn:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: atmConsumer/
+      Handler: handler.case3Handler
+      Runtime: nodejs18.x
+      Events:
+        Trigger:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern:
+              source:
+                - custom.myATMapp
+              detail-type:
+                - transaction
+              detail:
+                result:
+                  - anything-but: approved
+
+  EventRuleCase1:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Approved transactions
+      EventPattern:
+        source:
+          - custom.myATMapp
+        detail-type:
+          - transaction
+        detail:
+          result:
+            - approved
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt atmConsumerCase1Fn.Arn
+          Id: atmConsumerTarget1
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref atmConsumerCase1Fn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt EventRuleCase1.Arn
