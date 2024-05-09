@@ -11,9 +11,10 @@
  * 
  */
 
-export const lambdaHandler = async (event, context) => {
+export const helloworldHandler = async (event, context) => {
+// export const lambdaHandler = async (event, context) => {
 
-	console.log("Hello World")
+	console.log("Hello World -- From Hello World Handler -- app.mjs")
 
     const response = {
       statusCode: 200,

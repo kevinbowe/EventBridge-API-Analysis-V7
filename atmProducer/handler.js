@@ -3,11 +3,6 @@ const { EventBridgeClient, PutEventsCommand } = require("@aws-sdk/client-eventbr
 const ebClient = new EventBridgeClient()
 
 const lambdaHandler = async ( event, context ) => {
-
-				console.log("MODIFIED IN VSCode, LOCALLY")
-				console.log("A Change to atmProducer > handler.js > I'm still working...")
-
-
     const { params } = require('./events.js')
 
             console.log('--- Params ---')
@@ -16,7 +11,7 @@ const lambdaHandler = async ( event, context ) => {
     const putEventsCmd = new PutEventsCommand( params ) 
     const result = await ebClient.send( putEventsCmd )
     
-            console.log('--- Response ---')
+            console.log('--- Response --- From: atmProducer/ handler.js ---')
             console.log(result)  
 };
 
