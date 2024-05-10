@@ -10,17 +10,35 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello-world/
-      Handler: app.helloworldHandler
+      CodeUri: hwConsumer/
+      # CodeUri: hello-world/
+      Handler: app.HelloWorldHandler
+      # Handler: app.helloworldHandler
       Runtime: nodejs20.x
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        # HelloWorld:
+        #   Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        #   Properties:
+        #     Path: /hello
+        #     Method: get
+        Trigger:
+          Type: CloudWatchEvent
           Properties:
-            Path: /hello
-            Method: get
+            Pattern:
+              source:
+                - custom.myATMapp
+              detail-type:
+                - payment
+              detail:
+                action:
+                  - sendcard
+              # detail-type:
+              #   - transaction
+              # detail:
+              #   location:
+              #     - prefix: NY-
 
   atmProducerFn:
     Type: AWS::Serverless::Function

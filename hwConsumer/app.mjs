@@ -11,18 +11,21 @@
  * 
  */
 
-export const helloworldHandler = async (event, context) => {
+export const HelloWorldHandler = async (event, context) => {
+// export const helloworldHandler = async (event, context) => {
 // export const lambdaHandler = async (event, context) => {
 
-	console.log("Hello World -- From Hello World Handler -- app.mjs")
+	console.log("Hello World -- From app.mjs > HelloWorldHandler(~)")
+	// console.log("Hello World -- From Hello World Handler -- app.mjs")
+	
+	console.log(JSON.stringify(event, null, 2))
 
     const response = {
       statusCode: 200,
       body: JSON.stringify({
-        message: 'hello world',
+        message: 'hello world -- From app.mjs > HelloWorldHandler(~)',
       })
     };
-       
     return response;
   };
   

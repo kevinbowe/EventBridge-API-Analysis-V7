@@ -1,0 +1,20 @@
+{
+  "name": "eventbridge-api-analysis-v7",
+  "version": "1.0.0",
+  "description": "This example application creates two AWS Lambda functions - a producer and a consumer. The SAM template deploys these functions, together with an EventBridge rule that determines which events are routed to the consumer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	 "samsync" : "sam sync --template /Users/kevinbowe/Projects/Analysis/EventBridge-API-Analysis-V7/template.yaml --s3-bucket eb-api-analysis-v7-bucket --stack-name eb-api-analysis-v7-stack --region us-east-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinbowe/EventBridge-API-Analysis-V7.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevinbowe/EventBridge-API-Analysis-V7/issues"
+  },
+  "homepage": "https://github.com/kevinbowe/EventBridge-API-Analysis-V7#readme"
+}
