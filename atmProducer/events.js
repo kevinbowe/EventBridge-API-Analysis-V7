@@ -22,8 +22,7 @@ module.exports.params = {
 			})
 		},
 		{
-			// Event envelope fields  	// Rule 1 -- Approved
-												// HW Rule == sendcard
+			// Event envelope fields  	// HW Rule == sendcard
 			Source: 'custom.myATMapp',
 			// EventBusName: 'arn:aws:events:us-east-1:716677688107:event-bus/defaultStripe',
 			EventBusName: 'default',
