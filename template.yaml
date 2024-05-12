@@ -7,22 +7,40 @@ Globals:
     Timeout: 3
 
 Resources:
+  # EventBus:
+  #   Type: AWS::Events::EventBus
+  #   Properties:
+  #     Name: defaultStripe
+  # EventRule0:
+  #   Type: AWS::Events::Rule
+  #   Properties:
+  #     EventBusName: defaultStripe
+  #     EventPattern:
+  #       detail-type:
+  #         - payment
+  #       source:
+  #         - custom.myATMapp
+  #       detail:
+  #         action:
+  #           - sendcard
+  #     Name: defaultStripeRule
+  #     State: ENABLED
+  #     Targets:
+  #       - Id: Idd90b5c7d-b7dc-4a3d-ac02-93398b440af3
+  #         Arn: >-
+  #           arn:aws:lambda:us-east-1:716677688107:function:eb-api-analysis-v7-stack-HelloWorldFunction-y4gXHTZvWgf1
+  #   DependsOn:
+  #     - EventBus
+
   HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: hwConsumer/
-      # CodeUri: hello-world/
       Handler: app.HelloWorldHandler
-      # Handler: app.helloworldHandler
       Runtime: nodejs20.x
       Architectures:
         - x86_64
       Events:
-        # HelloWorld:
-        #   Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-        #   Properties:
-        #     Path: /hello
-        #     Method: get
         Trigger:
           Type: CloudWatchEvent
           Properties:
@@ -34,11 +52,6 @@ Resources:
               detail:
                 action:
                   - sendcard
-              # detail-type:
-              #   - transaction
-              # detail:
-              #   location:
-              #     - prefix: NY-
 
   atmProducerFn:
     Type: AWS::Serverless::Function
@@ -48,7 +61,7 @@ Resources:
       Runtime: nodejs18.x
       Events:
         atmProduceFn:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
             Path: /produce
             Method: get      
@@ -108,6 +121,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Approved transactions
+      EventBusName: default
       EventPattern:
         source:
           - custom.myATMapp
