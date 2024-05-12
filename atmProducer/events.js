@@ -41,6 +41,7 @@ module.exports.params = {
 		{
 			// Event envelope fields  // Rule 1 -- Approved
 			Source: 'custom.myATMapp',
+			EventBusName: 'default',
 			DetailType: 'transaction',
 			Time: new Date(),
 
